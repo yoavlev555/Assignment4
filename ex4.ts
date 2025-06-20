@@ -23,12 +23,23 @@ export function all<T>(promises : Array<Promise<T>>) : Promise<Array<T>> {
   
 // Q2
 export function* Fib1() {
-	// @TODO
-  return undefined;
+	let num1 = 0
+  let num2 = 1
+  while(true){
+    let res = num1 + num2
+    yield num2
+    num1 = num2
+    num2 = res
+  }
 }
 
-
 export function* Fib2() {
-	// @TODO
-  return undefined;
+  const sqrt5 = Math.sqrt(5)
+	const phi = (1 + sqrt5) / 2
+  const psi = (1 - sqrt5) / 2
+  let n = 1
+  while(true){
+    yield Math.floor(((phi ** n) - (psi ** n)) / sqrt5)
+    n++
+  }
 }
