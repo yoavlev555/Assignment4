@@ -62,13 +62,52 @@
   )
 )
 
+(define len$
+  (lambda (lst n) 
+    (if (empty? lst)
+      n
+      (len$ (cdr lst) (+ n 1))
+    )
+  )
+)
+
+(define len 
+  (lambda (lst)
+    (len$ lst 0)
+  )
+)
+
 ;;; Q3.2
 ; Signature: equal-trees$(tree1, tree2, succ, fail) 
 ; Type: [Tree * Tree * [Tree ->T1] * [Pair->T2] -> T1 U T2
 ; Purpose: Determines the structure identity of a given two lists, with post-processing succ/fail
 (define equal-trees$ 
   (lambda (tree1 tree2 succ fail)
-    #f ;@TODO
+    (if (and (empty? tree1) (empty? tree2))
+      (succ '())
+      (if (or (empty? tree1) (empty? tree2))
+        (fail (cons tree1 tree2))
+        (if (and (leaf? tree1) (leaf? tree2))
+          (succ (cons tree1 tree2))
+          (if (or (leaf? tree1) (leaf? tree2))
+            (fail (cons tree1 tree2))
+            (if (and (and (not (leaf? (car tree1))) (not (leaf? (car tree2))))
+            (not (eq? (len (car tree1)) (len (car tree2)))))
+              (fail (cons (car tree1) (car tree2)))
+              (equal-trees$ (car tree1) (car tree2)
+                (lambda (res-tree1)
+                  (equal-trees$ (cdr tree1) (cdr tree2)
+                    (lambda (res-tree2) (succ (cons res-tree1 res-tree2)))
+                    (lambda (err) (fail err))
+                  )
+                )
+                (lambda (err) (fail err))
+              )
+            )
+          )
+        )
+      )
+    )
   )
 )
 
