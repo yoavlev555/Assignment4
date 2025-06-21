@@ -24,12 +24,13 @@ export function all<T>(promises : Array<Promise<T>>) : Promise<Array<T>> {
 // Q2
 export function* Fib1() {
 	let num1 = 0
-  let num2 = 1
+  let num2 = 0
+  let res = 1
   while(true){
-    let res = num1 + num2
-    yield num2
+    yield res
     num1 = num2
     num2 = res
+    res = num1 + num2
   }
 }
 
