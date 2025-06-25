@@ -38,12 +38,9 @@ book(the_hobbit, t, f, s(s(s(zero)))).
 book(the_lord_of_the_rings, t, f, s(s(s(s(s(s(zero))))))).
 
 % You can add more facts
-bigger_then(A, zero, A).
-bigger_then(s(A), s(B), s(A)) :- bigger_then(A, B, A).
-
-
-%list_bigger(A, [], A)
-%list_bigger([T1 | S1], [T2 | S2], [T1 | S1]) :- list_bigger(S1, S2, S1)
+bigger_then( _ , zero).
+bigger_then(s(A), s(B)) :- bigger_then(A, B).
+not_empty([_|_]).
 
 %length_of_books_by_author(AuthorName, Lengths) :- author(AuthorID, AuthorName), findall(T, book(BookName, AuthorID, GenereID, T), Lengths).
 
@@ -51,9 +48,10 @@ bigger_then(s(A), s(B), s(A)) :- bigger_then(A, B, A).
 % Purpose: true if Max is the maximum church number in Lst, false if Lst is emoty.
 max_list([], false).
 max_list([T], T).
-max_list([A, B], A) :- bigger_then(A, B, A), !.
-max_list([_, B], B).
+max_list([A, B], A) :- bigger_then(A, B), !.
+max_list([A, B], B) :- bigger_then(B, A), !.
 max_list([H | T], Max) :-
+    not_empty(T),
     max_list(T, MaxT),
     max_list([H, MaxT], Max).
 
